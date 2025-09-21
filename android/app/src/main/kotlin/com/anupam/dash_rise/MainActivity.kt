@@ -1,4 +1,4 @@
-package com.example.dash_rise
+package com.anupam.dash_rise
 
 import io.flutter.embedding.android.FlutterActivity
 
