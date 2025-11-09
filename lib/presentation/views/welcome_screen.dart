@@ -25,7 +25,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   late AnimationController _titleController;
   late Animation<double> _titleScale;
   late AnimationController _playButtonController;
-  late Animation<double> _playButtonScale;
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
   late AnimationController _gradientController;
@@ -51,9 +50,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
-    _playButtonScale = Tween<double>(begin: 1.0, end: 1.12).animate(
-      CurvedAnimation(parent: _playButtonController, curve: Curves.easeInOut),
-    );
 
     _fadeController = AnimationController(
       vsync: this,
@@ -169,7 +165,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     valueListenable: isLoading,
                     builder: (context, loading, _) => PlayButtonWidget(
                       enabled: !loading,
-                      scale: _playButtonScale,
                       onPressed: () => Navigator.of(
                         context,
                       ).pushReplacementNamed(RouteNames.homeScreen),
@@ -335,45 +330,80 @@ class AnimatedGradientBackground extends StatelessWidget {
 // Extracted Play button widget
 class PlayButtonWidget extends StatelessWidget {
   final bool enabled;
-  final Animation<double> scale;
   final VoidCallback onPressed;
 
   const PlayButtonWidget({
     super.key,
     required this.enabled,
-    required this.scale,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: scale,
-      child: ElevatedButton(
-        onPressed: enabled ? onPressed : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.amberAccent,
-          foregroundColor: Colors.deepPurple[900],
-          padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 16),
-          textStyle: const TextStyle(
+    final buttonContent = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: const [
+        Icon(Icons.play_arrow_rounded, size: 28, color: ColorConstants.colorFFFFFF),
+        SizedBox(width: 10),
+        Text(
+          StringConstants.play,
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.1,
+            color: ColorConstants.colorFFFFFF,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
+        ),
+      ],
+    );
+
+    final baseDecoration = BoxDecoration(
+      color: ColorConstants.colorFFD740,
+      borderRadius: BorderRadius.circular(32),
+      boxShadow: const [
+        BoxShadow(
+          color: ColorConstants.shimmerShadow,
+          blurRadius: 14,
+          offset: Offset(0, 6),
+        ),
+      ],
+    );
+
+    // Original: background also had padding
+    Widget background = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20), // adjusted padding
+      decoration: baseDecoration,
+    );
+
+    if (enabled) {
+      background = Shimmer.fromColors(
+        baseColor: ColorConstants.colorFFD740.withValues(alpha: 0.85),
+        highlightColor: ColorConstants.colorFFFFFF.withValues(alpha: 0.9),
+        period: const Duration(milliseconds: 1800),
+        child: background,
+      );
+    }
+
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.55,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          background,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(32),
+              onTap: enabled ? onPressed : null,
+              splashColor: ColorConstants.colorFFFFFF.withValues(alpha: 0.25),
+              highlightColor: ColorConstants.colorFFFFFF.withValues(alpha: 0.15),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20), // adjusted padding
+                child: buttonContent,
+              ),
+            ),
           ),
-          elevation: 10,
-          shadowColor: const Color.fromRGBO(255, 193, 7, 0.7),
-        ),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.play_arrow_rounded, size: 28),
-            SizedBox(width: 10),
-            Text(StringConstants.play),
-          ],
-        ),
+        ],
       ),
     );
   }
