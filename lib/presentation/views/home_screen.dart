@@ -1,4 +1,3 @@
-
 import 'package:dash_rise/presentation/widgets/game_over_widget.dart';
 import 'package:dash_rise/presentation/widgets/game_start_text_widget.dart';
 import 'package:dash_rise/presentation/widgets/score_widget.dart';
@@ -20,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late FlappyBirdGame _flappyBirdGame;
   late GameCubit gameCubit;
   PlayingState? latestState;
@@ -32,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     gameCubit = BlocProvider.of<GameCubit>(context);
     _flappyBirdGame = FlappyBirdGame(gameCubit: gameCubit);
     _initAudio();
@@ -49,9 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _musicOn.dispose();
     _soundOn.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final audio = AudioController();
+    if (state == AppLifecycleState.paused) {
+      audio.stopBackground();
+    } else if (state == AppLifecycleState.resumed) {
+      if (audio.musicEnabled.value) {
+        audio.playBackgroundLoop();
+      }
+    }
   }
 
   @override
