@@ -1,10 +1,10 @@
+import 'package:dash_rise/presentation/blocs/game_cubit/game_cubit.dart';
+import 'package:dash_rise/presentation/components/flappy_bird_root_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
-import 'blocs/game_cubit/game_cubit.dart';
-import 'components/flappy_bird_root_component.dart';
 
 class FlappyBirdGame extends FlameGame<FlappyBirdWorld> {
   FlappyBirdGame({required this.gameCubit})

@@ -2,9 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
+import '../../flappy_bird_game.dart';
+import '../../utils/constants/image_path.dart';
 import '../blocs/game_cubit/game_cubit.dart';
-import '../flappy_bird_game.dart';
-import '../utils/constants/image_path.dart';
+
+
 
 class BackgroundComponent extends ParallaxComponent<FlappyBirdGame>
     with FlameBlocReader<GameCubit, GameState> {

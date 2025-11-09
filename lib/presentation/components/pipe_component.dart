@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-import '../flappy_bird_game.dart';
-import '../utils/constants/image_path.dart';
+import '../../flappy_bird_game.dart';
+import '../../utils/constants/image_path.dart';
+
 
 class PipeComponent extends PositionComponent with HasGameRef<FlappyBirdGame> {
   final bool isFlipped;

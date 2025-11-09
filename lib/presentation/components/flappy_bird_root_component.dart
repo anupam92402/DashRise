@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:dash_rise/components/pipe_pair_component.dart';
+import 'package:dash_rise/presentation/components/pipe_pair_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
 import '../blocs/game_cubit/game_cubit.dart';
-import '../flappy_bird_game.dart';
+import '../../flappy_bird_game.dart';
 import 'background_component.dart';
 import 'boundary_component.dart';
 import 'dash_component.dart';

@@ -1,16 +1,17 @@
 import 'dart:ui';
 
-import 'package:dash_rise/components/pipe_component.dart';
+import 'package:dash_rise/presentation/components/pipe_component.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
 import 'package:flutter/material.dart';
 
+
 import '../blocs/game_cubit/game_cubit.dart';
-import '../flappy_bird_game.dart';
-import '../utils/audio_controller.dart';
-import '../utils/constants/image_path.dart';
+import '../../data/controllers/audio_controller.dart';
+import '../../flappy_bird_game.dart';
+import '../../utils/constants/image_path.dart';
 import 'boundary_component.dart';
 import 'hidden_coin_component.dart';
 

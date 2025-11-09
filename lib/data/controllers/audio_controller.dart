@@ -1,7 +1,7 @@
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dash_rise/data/local_storage/audio_storage.dart';
-import 'constants/audio_constants.dart';
+import '../../utils/constants/audio_constants.dart';
 
 class AudioController {
   static final AudioController _instance = AudioController._internal();

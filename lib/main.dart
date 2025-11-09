@@ -1,9 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'blocs/game_cubit/game_cubit.dart';
 import 'utils/routing/app_router.dart';
 import 'utils/routing/route_names.dart';
 
@@ -27,15 +25,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GameCubit(),
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: 'Chewy'),
-        debugShowCheckedModeBanner: false,
-        title: 'DashRise',
-        initialRoute: RouteNames.welcomeScreen,
-        onGenerateRoute: AppRouter.onGenerateRoute,
-      ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Chewy'),
+      debugShowCheckedModeBanner: false,
+      title: 'DashRise',
+      initialRoute: RouteNames.welcomeScreen,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

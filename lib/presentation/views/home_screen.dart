@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../blocs/game_cubit/game_cubit.dart';
+import '../blocs/game_cubit/game_cubit.dart';
 import '../../flappy_bird_game.dart';
-import '../../utils/audio_controller.dart';
+import '../../data/controllers/audio_controller.dart';
 import '../../utils/constants/color_constants.dart';
 import '../../utils/constants/string_constants.dart';
 

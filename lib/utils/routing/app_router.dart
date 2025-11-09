@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../presentation/blocs/game_cubit/game_cubit.dart';
 import '../../presentation/views/home_screen.dart';
 import '../../presentation/views/welcome_screen.dart';
 import 'route_names.dart';
@@ -7,17 +10,20 @@ class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.welcomeScreen:
-        return MaterialPageRoute(
-          builder: (context) => WelcomeScreen(),
-        );
+        return MaterialPageRoute(builder: (context) => WelcomeScreen());
       case RouteNames.homeScreen:
         return MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => BlocProvider(
+            create: (context) => GameCubit(),
+            child: const HomeScreen(),
+          ),
         );
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
-            body: Center(child: Text('No route defined for \'${settings.name}\'')),
+            body: Center(
+              child: Text('No route defined for \'${settings.name}\''),
+            ),
           ),
         );
     }

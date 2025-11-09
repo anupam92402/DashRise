@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../data/local_storage/score_storage.dart';
+
+import '../../../data/local_storage/score_storage.dart';
 
 part 'game_state.dart';
 

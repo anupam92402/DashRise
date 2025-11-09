@@ -1,4 +1,4 @@
-import 'package:dash_rise/components/pipe_component.dart';
+import 'package:dash_rise/presentation/components/pipe_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
