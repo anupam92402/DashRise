@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../utils/score_storage.dart';
 
 part 'game_state.dart';
 
@@ -20,6 +21,9 @@ class GameCubit extends Cubit<GameState> {
   }
 
   void gameOver() {
+    // Store last score and update highest score if needed
+    ScoreStorage.saveLastScore(state.currentScore);
+    ScoreStorage.saveHighestScore(state.currentScore);
     emit(state.copyWith(currentPlayingState: PlayingState.gameOver));
   }
 

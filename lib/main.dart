@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/game_cubit/game_cubit.dart';
-import 'home_page.dart';
+import 'utils/app_router.dart';
+import 'utils/route_names.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Chewy'),
         debugShowCheckedModeBanner: false,
         title: 'DashRise',
-        home: const HomePage(),
+        initialRoute: RouteNames.welcomeScreen,
+        onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );
   }
