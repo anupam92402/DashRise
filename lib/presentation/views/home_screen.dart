@@ -4,13 +4,12 @@ import 'package:dash_rise/presentation/widgets/score_widget.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/foundation.dart';
 
 import '../blocs/game_cubit/game_cubit.dart';
 import '../../flappy_bird_game.dart';
 import '../../data/controllers/audio_controller.dart';
 import '../../utils/constants/color_constants.dart';
-import '../../utils/constants/string_constants.dart';
+import '../widgets/pause_menu_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // Replace bools with ValueNotifiers
   final ValueNotifier<bool> _musicOn = ValueNotifier<bool>(true);
   final ValueNotifier<bool> _soundOn = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _showPauseMenu = ValueNotifier<bool>(false);
 
   @override
   void initState() {
@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _musicOn.dispose();
     _soundOn.dispose();
+    _showPauseMenu.dispose();
     super.dispose();
   }
 
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return BlocConsumer<GameCubit, GameState>(
       listener: (context, state) {
         if (state.currentPlayingState == PlayingState.idle &&
-            latestState == PlayingState.gameOver) {
+            (latestState == PlayingState.gameOver || latestState == PlayingState.paused)) {
           setState(() {
             _flappyBirdGame = FlappyBirdGame(gameCubit: gameCubit);
           });
@@ -91,12 +92,39 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 GameStartTextWidget(),
               if (state.currentPlayingState != PlayingState.gameOver)
                 ScoreWidget(score: state.currentScore.toString()),
-              // Top-right music & sound toggles (placed last for highest z-order)
-              _AudioTogglePanel(
-                topPadding: topPadding,
-                musicOn: _musicOn,
-                soundOn: _soundOn,
+              // Show pause menu if explicitly requested or game is paused
+              ValueListenableBuilder<bool>(
+                valueListenable: _showPauseMenu,
+                builder: (context, show, _) {
+                  if (!show && state.currentPlayingState != PlayingState.paused) {
+                    return const SizedBox.shrink();
+                  }
+                  return PauseMenuWidget(
+                    onClose: () => _showPauseMenu.value = false,
+                    musicOn: _musicOn,
+                    soundOn: _soundOn,
+                  );
+                },
               ),
+              if (state.currentPlayingState != PlayingState.gameOver)
+                Positioned(
+                  top: topPadding + 8,
+                  left: 12,
+                  child: _PauseButton(
+                    onTap: () {
+                      if (state.currentPlayingState == PlayingState.playing) {
+                        gameCubit.pauseGame();
+                        _showPauseMenu.value = true;
+                      } else if (state.currentPlayingState == PlayingState.paused) {
+                        gameCubit.resumeGame();
+                        _showPauseMenu.value = false;
+                      } else {
+                        _showPauseMenu.value = !_showPauseMenu.value;
+                      }
+                    },
+                    isPaused: state.currentPlayingState == PlayingState.paused || _showPauseMenu.value,
+                  ),
+                ),
             ],
           ),
         );
@@ -105,91 +133,32 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 }
 
-class _AudioTogglePanel extends StatelessWidget {
-  final double topPadding;
-  final ValueNotifier<bool> musicOn;
-  final ValueNotifier<bool> soundOn;
-  const _AudioTogglePanel({
-    required this.topPadding,
-    required this.musicOn,
-    required this.soundOn,
-  });
+class _PauseButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final bool isPaused;
+  const _PauseButton({required this.onTap, required this.isPaused});
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: topPadding,
-      right: 12,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ToggleIcon(
-            stateListenable: musicOn,
-            onIcon: Icons.music_note,
-            offIcon: Icons.music_off,
-            tooltipOn: StringConstants.musicOn,
-            tooltipOff: StringConstants.musicOff,
-            onToggle: () {
-              musicOn.value = !musicOn.value;
-              AudioController().setMusic(musicOn.value);
-              debugPrint(StringConstants.musicToggledPrefix + musicOn.value.toString());
-            },
+    return Material(
+      color: Colors.transparent,
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: ColorConstants.color9E9E9E.withValues(alpha: 0.35),
           ),
-          const SizedBox(height: 16),
-          _ToggleIcon(
-            stateListenable: soundOn,
-            onIcon: Icons.volume_up,
-            offIcon: Icons.volume_off,
-            tooltipOn: StringConstants.soundOn,
-            tooltipOff: StringConstants.soundOff,
-            onToggle: () {
-              soundOn.value = !soundOn.value;
-              AudioController().setSound(soundOn.value);
-              debugPrint(StringConstants.soundToggledPrefix + soundOn.value.toString());
-            },
+          padding: const EdgeInsets.all(10),
+          child: Icon(
+            isPaused ? Icons.play_arrow : Icons.pause,
+            color: ColorConstants.colorFFFFFF,
+            size: 28,
           ),
-        ],
+        ),
       ),
-    );
-  }
-}
-
-class _ToggleIcon extends StatelessWidget {
-  final ValueListenable<bool> stateListenable;
-  final IconData onIcon;
-  final IconData offIcon;
-  final VoidCallback onToggle;
-  final String tooltipOn;
-  final String tooltipOff;
-  const _ToggleIcon({
-    required this.stateListenable,
-    required this.onIcon,
-    required this.offIcon,
-    required this.onToggle,
-    required this.tooltipOn,
-    required this.tooltipOff,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: stateListenable,
-      builder: (context, isOn, _) {
-        return Material(
-          color: ColorConstants.shimmerContainer,
-          shape: const CircleBorder(),
-          child: Tooltip(
-            message: isOn ? tooltipOn : tooltipOff,
-            child: IconButton(
-              onPressed: onToggle,
-              icon: Icon(isOn ? onIcon : offIcon),
-              color: ColorConstants.colorIconWhite,
-              iconSize: 28,
-              splashRadius: 24,
-            ),
-          ),
-        );
-      },
     );
   }
 }

@@ -69,6 +69,10 @@ class FlappyBirdRootComponent extends Component
   @override
   void update(double dt) {
     super.update(dt);
+    // Prevent spawning pipes when not actively playing
+    if (bloc.state.currentPlayingState != PlayingState.playing) {
+      return;
+    }
     if (_dashComponent.x >= _lastPipe.x) {
       _addPipesComponent(fromX: _horizontalDistance);
       _removePipes();

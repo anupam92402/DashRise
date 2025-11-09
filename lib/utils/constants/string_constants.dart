@@ -15,4 +15,9 @@ class StringConstants {
   static const soundOff = 'Sound Off';
   static const musicToggledPrefix = 'Music toggled: ';
   static const soundToggledPrefix = 'Sound toggled: ';
+  static const pause = 'Pause';
+  static const resume = 'Resume';
+  static const restart = 'Restart';
+  static const exitToMenu = 'Exit';
+  static const pausedTitle = 'Game Paused';
 }

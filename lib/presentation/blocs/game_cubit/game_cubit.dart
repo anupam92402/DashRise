@@ -33,4 +33,16 @@ class GameCubit extends Cubit<GameState> {
       state.copyWith(currentPlayingState: PlayingState.idle, currentScore: 0),
     );
   }
+
+  void pauseGame() {
+    if (state.currentPlayingState == PlayingState.playing) {
+      emit(state.copyWith(currentPlayingState: PlayingState.paused));
+    }
+  }
+
+  void resumeGame() {
+    if (state.currentPlayingState == PlayingState.paused) {
+      emit(state.copyWith(currentPlayingState: PlayingState.playing));
+    }
+  }
 }
