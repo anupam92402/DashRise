@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/game_cubit/game_cubit.dart';
-import 'utils/app_router.dart';
-import 'utils/route_names.dart';
+import 'utils/routing/app_router.dart';
+import 'utils/routing/route_names.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

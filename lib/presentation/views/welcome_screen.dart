@@ -1,11 +1,13 @@
 import 'dart:math';
-import 'package:dash_rise/utils/color_constants.dart';
-import 'package:dash_rise/utils/constants.dart';
-import 'package:dash_rise/utils/route_names.dart';
-import 'package:dash_rise/utils/string_constants.dart';
+
+import 'package:dash_rise/utils/constants/color_constants.dart';
+import 'package:dash_rise/utils/constants/string_constants.dart';
+import 'package:dash_rise/utils/routing/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../utils/constants/constants_keys.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -14,7 +16,8 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with TickerProviderStateMixin {
   final ValueNotifier<int?> lastScore = ValueNotifier<int?>(null);
   final ValueNotifier<int?> highScore = ValueNotifier<int?>(null);
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
@@ -56,7 +59,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
-    _fadeAnimation = CurvedAnimation(parent: _fadeController, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeIn,
+    );
 
     _gradientController = AnimationController(
       vsync: this,
@@ -79,8 +85,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   Future<void> _loadScores() async {
     final prefs = await SharedPreferences.getInstance();
     await Future.delayed(const Duration(seconds: 1));
-    lastScore.value = prefs.getInt(Constants.lastScore) ?? 0;
-    highScore.value = prefs.getInt(Constants.highScore) ?? 0;
+    lastScore.value = prefs.getInt(ConstantsKeys.lastScore) ?? 0;
+    highScore.value = prefs.getInt(ConstantsKeys.highScore) ?? 0;
     isLoading.value = false;
   }
 
@@ -164,8 +170,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                     builder: (context, loading, _) => PlayButtonWidget(
                       enabled: !loading,
                       scale: _playButtonScale,
-                      onPressed: () => Navigator.of(context)
-                          .pushReplacementNamed(RouteNames.homeScreen),
+                      onPressed: () => Navigator.of(
+                        context,
+                      ).pushReplacementNamed(RouteNames.homeScreen),
                     ),
                   ),
                 ],
@@ -183,6 +190,7 @@ class ScoreCard extends StatelessWidget {
   final Animation<double> fadeAnimation;
   final ValueNotifier<int?> lastScore;
   final ValueNotifier<int?> highScore;
+
   const ScoreCard({
     super.key,
     required this.isLoading,
@@ -224,7 +232,10 @@ class ScoreCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: ColorConstants.shimmerContainer,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: ColorConstants.shimmerBorder, width: 1.5),
+              border: Border.all(
+                color: ColorConstants.shimmerBorder,
+                width: 1.5,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: ColorConstants.shimmerShadow,
@@ -245,7 +256,13 @@ class ScoreCard extends StatelessWidget {
                       color: ColorConstants.colorWhiteText,
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.5,
-                      shadows: [Shadow(blurRadius: 4, color: Colors.black26, offset: Offset(1,2))],
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black26,
+                          offset: Offset(1, 2),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -260,7 +277,11 @@ class ScoreCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.7,
                       shadows: [
-                        Shadow(blurRadius: 10, color: Colors.black87, offset: Offset(0,2)),
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.black87,
+                          offset: Offset(0, 2),
+                        ),
                       ],
                     ),
                   ),
@@ -277,6 +298,7 @@ class ScoreCard extends StatelessWidget {
 // New optimized background widget
 class AnimatedGradientBackground extends StatelessWidget {
   final AnimationController controller;
+
   const AnimatedGradientBackground({super.key, required this.controller});
 
   @override
@@ -315,6 +337,7 @@ class PlayButtonWidget extends StatelessWidget {
   final bool enabled;
   final Animation<double> scale;
   final VoidCallback onPressed;
+
   const PlayButtonWidget({
     super.key,
     required this.enabled,

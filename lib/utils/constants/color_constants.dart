@@ -22,4 +22,7 @@ class ColorConstants {
 
   // Text colors for score card
   static const colorWhiteText = Color.fromRGBO(255, 255, 255, 0.92);
+
+  // Icon colors
+  static const colorIconWhite = Color(0xFFFFFFFF);
 }

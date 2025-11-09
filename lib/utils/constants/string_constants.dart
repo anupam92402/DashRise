@@ -9,4 +9,10 @@ class StringConstants {
   static const playAgain = 'Play Again';
   static const tapToPlay = 'TAP TO PLAY';
   static const score = 'Score:';
+  static const musicOn = 'Music On';
+  static const musicOff = 'Music Off';
+  static const soundOn = 'Sound On';
+  static const soundOff = 'Sound Off';
+  static const musicToggledPrefix = 'Music toggled: ';
+  static const soundToggledPrefix = 'Sound toggled: ';
 }

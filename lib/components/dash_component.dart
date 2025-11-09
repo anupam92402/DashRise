@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 
 import '../blocs/game_cubit/game_cubit.dart';
 import '../flappy_bird_game.dart';
-import '../utils/image_path.dart';
+import '../utils/audio_controller.dart';
+import '../utils/constants/image_path.dart';
 import 'boundary_component.dart';
 import 'hidden_coin_component.dart';
 
@@ -79,6 +80,7 @@ class DashComponent extends PositionComponent
     if (other is HiddenCoinComponent) {
       other.removeFromParent();
       bloc.increaseScore();
+      AudioController().playScoreSfx();
     } else if (other is PipeComponent || other is BoundaryComponent) {
       bloc.gameOver();
     }

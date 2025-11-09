@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/game_cubit/game_cubit.dart';
-import '../utils/color_constants.dart';
-import '../utils/string_constants.dart';
+import '../../blocs/game_cubit/game_cubit.dart';
+import '../../utils/constants/color_constants.dart';
+import '../../utils/constants/string_constants.dart';
+
+
 
 class GameOverWidget extends StatelessWidget {
   const GameOverWidget({super.key});

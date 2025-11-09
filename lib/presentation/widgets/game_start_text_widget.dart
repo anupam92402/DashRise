@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../utils/color_constants.dart';
-import '../utils/string_constants.dart';
+import '../../utils/constants/color_constants.dart';
+import '../../utils/constants/string_constants.dart';
+
 
 class GameStartTextWidget extends StatelessWidget {
   const GameStartTextWidget({super.key});

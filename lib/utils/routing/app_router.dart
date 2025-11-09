@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../welcome_screen.dart';
-import '../home_page.dart';
+import '../../presentation/views/home_screen.dart';
+import '../../presentation/views/welcome_screen.dart';
 import 'route_names.dart';
 
 class AppRouter {
@@ -12,7 +12,7 @@ class AppRouter {
         );
       case RouteNames.homeScreen:
         return MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const HomeScreen(),
         );
       default:
         return MaterialPageRoute(
